@@ -54,17 +54,10 @@ modules:
 
     sources:
       # -----------------------------------------------------------------------
-      # Slicer 5.10.0 stable (revision 34045) — Linux amd64
-      # Source: https://download.slicer.org  (bitstream 6911b598ac7b1c95e7934427)
-      # SHA512 (from Kitware): 2ea56b6f0c027fa73c832b23c34948e69b1b5124edf337a35f6a062f5cb78e7feb792c11bc02a4986f26e458ddfd954b00255953018bf6cc7d73834aba9f0267
-      #
-      # To get the SHA256 (required below), run:
-      #   wget -qO Slicer-5.10.0-linux-amd64.tar.gz \
-      #     "https://slicer-packages.kitware.com/api/v1/item/6911b598ac7b1c95e7934427/download"
-      #   sha256sum Slicer-5.10.0-linux-amd64.tar.gz
-      #
-      # To update to a newer release, visit https://download.slicer.org and use
-      # the "Inspect element" tab to find the new bitstream ID for Linux amd64.
+      # Slicer 5.10.0 — Linux amd64
+      # Bitstream ID: 6911b598ac7b1c95e7934427
+      # To update: ./update.sh <NEW_VERSION> <NEW_BITSTREAM_ID>
+      # (Find BITSTREAM_ID at https://download.slicer.org via DevTools → Network)
       # -----------------------------------------------------------------------
       - type: archive
         url: https://slicer-packages.kitware.com/api/v1/item/6911b598ac7b1c95e7934427/download
