@@ -20,7 +20,7 @@
 SLICER_INSTALL="/app/opt/Slicer"
 LAUNCHER_SETTINGS="$SLICER_INSTALL/bin/SlicerLauncherSettings.ini"
 REVISION=$(grep "^revision=" "$LAUNCHER_SETTINGS" 2>/dev/null | cut -d= -f2 | tr -d '[:space:]')
-REVISION="${REVISION:-34045}"
+REVISION="${REVISION:-34621}"
 
 SLICER_HOME_OVERRIDE="${XDG_DATA_HOME:-$HOME/.local/share}/Slicer"
 SETTINGS_DIR="$SLICER_HOME_OVERRIDE/slicer.org"

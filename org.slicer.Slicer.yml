@@ -54,15 +54,15 @@ modules:
 
     sources:
       # -----------------------------------------------------------------------
-      # Slicer 5.10.0 — Linux amd64
-      # Bitstream ID: 6911b598ac7b1c95e7934427
+      # Slicer 5.12.0 — Linux amd64
+      # Bitstream ID: 6a3b212e3e1fb85a5846b058
       # To update: ./update.sh <NEW_VERSION> <NEW_BITSTREAM_ID>
       # (Find BITSTREAM_ID at https://download.slicer.org via DevTools → Network)
       # -----------------------------------------------------------------------
       - type: archive
-        url: https://slicer-packages.kitware.com/api/v1/item/6911b598ac7b1c95e7934427/download
-        dest-filename: Slicer-5.10.0-linux-amd64.tar.gz
-        sha256: 682129db1673dd3a0ebc35005c4f307d9dd3dc101d19fd7f48403130854f4ff5
+        url: https://slicer-packages.kitware.com/api/v1/item/6a3b212e3e1fb85a5846b058/download
+        dest-filename: Slicer-5.12.0-linux-amd64.tar.gz
+        sha256: fadd3ac918ac47e5381fa87600798051774cf7e5bf2436c6757ed4bc944e71a1
         dest: slicer-bin
         strip-components: 1
 
