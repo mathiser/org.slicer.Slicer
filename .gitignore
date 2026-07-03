@@ -2,6 +2,7 @@
 build-dir/
 .flatpak-builder/
 *.flatpak
+repo/
 
 # downloaded tarballs (fetched by update.sh)
 *.tar.gz
