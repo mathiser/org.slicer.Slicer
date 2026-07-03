@@ -33,12 +33,29 @@ jobs:
           restore-keys: flatpak-dl-
 
       - name: Build
-        run: flatpak-builder --force-clean build-dir org.slicer.Slicer.yml
+        run: flatpak-builder --force-clean --repo=repo build-dir org.slicer.Slicer.yml
+
+      - name: Install locally for testing
+        run: flatpak install --user -y repo org.slicer.Slicer
+
+      - name: Check for missing libraries
+        run: |
+          missing=$(flatpak run --command=bash org.slicer.Slicer -c "
+            find /app -type f \( -name '*.so' -o -name '*.so.*' -o -name 'SlicerApp-real' \) 2>/dev/null \
+              | xargs ldd 2>/dev/null \
+              | grep 'not found' \
+              | awk '{print \$1}' \
+              | sort -u
+          ")
+          if [ -n "$missing" ]; then
+            echo "::error::Missing libraries inside Flatpak sandbox:"
+            echo "$missing"
+            exit 1
+          fi
+          echo "All libraries resolved inside sandbox."
 
       - name: Export bundle
-        run: |
-          flatpak-builder --export-only --repo=repo build-dir org.slicer.Slicer.yml
-          flatpak build-bundle repo org.slicer.Slicer.flatpak org.slicer.Slicer
+        run: flatpak build-bundle "${HOME}/.local/share/flatpak/repo" org.slicer.Slicer.flatpak org.slicer.Slicer
 
       - name: Get Slicer version
         id: ver
