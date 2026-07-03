@@ -76,3 +76,9 @@ jobs:
             ```bash
             flatpak install org.slicer.Slicer.flatpak
             ```
+
+            **Troubleshooting:** if the app fails with "Could not initialize GLX",
+            install the GPU driver extension for the runtime branch:
+            ```bash
+            flatpak install flathub org.freedesktop.Platform.GL.default//24.08
+            ```

@@ -17,7 +17,7 @@ finish-args:
   - --filesystem=home
   # QtWebEngine (used by Slicer's web views) conflicts with Flatpak's seccomp filter
   - --env=QTWEBENGINE_DISABLE_SANDBOX=1
-  # Force XCB backend; Slicer's bundled Qt may not support Wayland natively
+  # Force XCB backend (Slicer's bundled Qt has no Wayland plugin)
   - --env=QT_QPA_PLATFORM=xcb
 
 modules:
