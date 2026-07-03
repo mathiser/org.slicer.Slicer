@@ -66,6 +66,8 @@ OVERRIDE_INI="$(mktemp /tmp/slicer-launcher-XXXXXX.ini)"
 printf '[EnvironmentVariables]\nSLICER_HOME=%s\n' "$SLICER_HOME_OVERRIDE" > "$OVERRIDE_INI"
 trap "rm -f '$OVERRIDE_INI'" EXIT
 
+export LD_LIBRARY_PATH="/app/lib${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
+
 exec "$SLICER_INSTALL/Slicer" \
     --launcher-additional-settings "$OVERRIDE_INI" \
     "$@"
