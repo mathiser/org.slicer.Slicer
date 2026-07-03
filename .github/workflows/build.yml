@@ -1,0 +1,61 @@
+name: Build and release Flatpak
+
+on:
+  push:
+    branches: [master]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install flatpak-builder
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y flatpak flatpak-builder
+
+      - name: Add Flathub remote
+        run: flatpak remote-add --user --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+
+      - name: Install runtime and SDK
+        run: flatpak install --user -y flathub org.freedesktop.Platform//24.08 org.freedesktop.Sdk//24.08
+
+      - name: Cache downloads
+        uses: actions/cache@v4
+        with:
+          path: .flatpak-builder/downloads
+          key: flatpak-dl-${{ hashFiles('org.slicer.Slicer.yml') }}
+          restore-keys: flatpak-dl-
+
+      - name: Build
+        run: flatpak-builder --force-clean build-dir org.slicer.Slicer.yml
+
+      - name: Export bundle
+        run: |
+          flatpak-builder --export-only --repo=repo build-dir org.slicer.Slicer.yml
+          flatpak build-bundle repo org.slicer.Slicer.flatpak org.slicer.Slicer
+
+      - name: Get Slicer version
+        id: ver
+        run: |
+          echo "version=$(grep -oP 'Slicer-\K[\d.]+(?=-linux-amd64)' org.slicer.Slicer.yml | head -1)" >> "$GITHUB_OUTPUT"
+
+      - name: Create or update release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ steps.ver.outputs.version }}
+          name: "3D Slicer ${{ steps.ver.outputs.version }}"
+          make_latest: true
+          files: org.slicer.Slicer.flatpak
+          body: |
+            Flatpak bundle for 3D Slicer ${{ steps.ver.outputs.version }}.
+
+            **Install:**
+            ```bash
+            flatpak install org.slicer.Slicer.flatpak
+            ```
