@@ -1,14 +1,13 @@
 app-id: org.slicer.Slicer
 runtime: org.freedesktop.Platform
-runtime-version: '24.08'
+runtime-version: '25.08'
 sdk: org.freedesktop.Sdk
 command: slicer
 
 finish-args:
-  # Display
+  # Display (X11 only — Slicer's bundled Qt has no Wayland platform plugin)
   - --share=ipc
   - --socket=x11
-  - --socket=wayland
   # 3D rendering
   - --device=dri
   # Extension manager and DICOM networking

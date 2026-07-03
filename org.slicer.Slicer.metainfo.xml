@@ -25,7 +25,9 @@
     </ul>
   </description>
 
-  <developer_name>Slicer Contributors</developer_name>
+  <developer id="org.slicer">
+    <name>Slicer Community</name>
+  </developer>
 
   <url type="homepage">https://www.slicer.org/</url>
   <url type="bugtracker">https://github.com/Slicer/Slicer/issues</url>
@@ -70,8 +72,8 @@
 
   <screenshots>
     <screenshot type="default">
-      <caption>3D Slicer main window with volume rendering</caption>
-      <image>https://www.slicer.org/assets/img/3DSlicerHome.png</image>
+      <caption>3D Slicer main window</caption>
+      <image>https://github.com/Slicer/Slicer/releases/download/docs-resources/user_interface_main_window_rev02.png</image>
     </screenshot>
   </screenshots>
 </component>

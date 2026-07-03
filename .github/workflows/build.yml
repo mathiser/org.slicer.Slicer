@@ -23,7 +23,7 @@ jobs:
         run: flatpak remote-add --user --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
 
       - name: Install runtime and SDK
-        run: flatpak install --user -y flathub org.freedesktop.Platform//24.08 org.freedesktop.Sdk//24.08
+        run: flatpak install --user -y flathub org.freedesktop.Platform//25.08 org.freedesktop.Sdk//25.08
 
       - name: Cache downloads
         uses: actions/cache@v4
@@ -80,5 +80,5 @@ jobs:
             **Troubleshooting:** if the app fails with "Could not initialize GLX",
             install the GPU driver extension for the runtime branch:
             ```bash
-            flatpak install flathub org.freedesktop.Platform.GL.default//24.08
+            flatpak install flathub org.freedesktop.Platform.GL.default//25.08
             ```
