@@ -36,7 +36,7 @@ jobs:
         run: flatpak-builder --force-clean --repo=repo build-dir org.slicer.Slicer.yml
 
       - name: Install locally for testing
-        run: flatpak install --user -y repo org.slicer.Slicer
+        run: flatpak install --user -y ./repo org.slicer.Slicer
 
       - name: Check for missing libraries
         run: |
