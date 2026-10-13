@@ -25,7 +25,7 @@ echo "==> Checking for missing libraries inside sandbox..."
 # _crypt module are excluded: they need libpq/libodbc/libcrypt.so.1, which
 # aren't bundled or in the runtime, but Slicer never loads them.
 missing=$(flatpak run --command=bash "$APP_ID" -c '
-  export LD_LIBRARY_PATH=$(find /app/opt/Slicer -type f -name "*.so*" -exec dirname {} \; | sort -u | tr "\n" ":")
+  export LD_LIBRARY_PATH=$(find /app -type f -name "*.so*" -not -path "*/lib/debug/*" -exec dirname {} \; | sort -u | tr "\n" ":")
   find /app -type f \( -name "*.so" -o -name "*.so.*" -o -name "SlicerApp-real" \) \
     -not -path "*/sqldrivers/libqsqlodbc.so" \
     -not -path "*/sqldrivers/libqsqlpsql.so" \
