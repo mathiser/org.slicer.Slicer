@@ -3,6 +3,8 @@ name: Build and release Flatpak
 on:
   push:
     branches: [master]
+  pull_request:
+    branches: [master]
   workflow_dispatch:
 
 jobs:
@@ -17,7 +19,7 @@ jobs:
       - name: Install flatpak-builder
         run: |
           sudo apt-get update -qq
-          sudo apt-get install -y flatpak flatpak-builder
+          sudo apt-get install -y flatpak flatpak-builder xvfb
 
       - name: Add Flathub remote
         run: flatpak remote-add --user --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
@@ -69,15 +71,39 @@ jobs:
           fi
           echo "All libraries resolved inside sandbox."
 
+      - name: Launch smoke test
+        run: |
+          # The missing-library check above bypasses the real launch path
+          # (slicer.sh -> CTK launcher -> SlicerApp-real) and has missed a
+          # real crash before (libGLU.so.1 not found only at actual launch,
+          # see commit 8d3f715). Actually launch the app under Xvfb and
+          # confirm it reaches the main window instead of crashing.
+          set +e
+          xvfb-run -a timeout 30 flatpak run org.slicer.Slicer > launch.log 2>&1
+          set -e
+          cat launch.log
+          if grep -q "error while loading shared libraries" launch.log; then
+            echo "::error::Slicer crashed at launch due to a missing shared library — see log above."
+            exit 1
+          fi
+          if ! grep -qE 'Switch to module: *"Welcome"' launch.log; then
+            echo "::error::Slicer did not reach the Welcome screen within the smoke-test window."
+            exit 1
+          fi
+          echo "Launch smoke test passed — reached the Welcome screen."
+
       - name: Export bundle
+        if: github.event_name == 'push'
         run: flatpak build-bundle "${HOME}/.local/share/flatpak/repo" org.slicer.Slicer.flatpak org.slicer.Slicer
 
       - name: Get Slicer version
+        if: github.event_name == 'push'
         id: ver
         run: |
           echo "version=$(grep -oP 'Slicer-\K[\d.]+(?=-linux-amd64)' org.slicer.Slicer.yml | head -1)" >> "$GITHUB_OUTPUT"
 
       - name: Create or update release
+        if: github.event_name == 'push'
         uses: softprops/action-gh-release@v2
         with:
           tag_name: v${{ steps.ver.outputs.version }}
