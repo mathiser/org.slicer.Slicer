@@ -37,6 +37,20 @@ modules:
       - cp -r slicer-bin /app/opt/Slicer
       - chmod +x /app/opt/Slicer/Slicer
 
+      # SlicerApp-real needs libGLU.so.1, but the CTK launcher execs it
+      # with LD_LIBRARY_PATH built only from SlicerLauncherSettings.ini's
+      # own [LibraryPaths] list (which covers /app/opt/Slicer/lib, not
+      # /app/lib). Whether /app/lib resolves on its own depends on the
+      # installing Flatpak client/scope and was observed to fail for a
+      # real system-wide install of a CI-built bundle, so link it into a
+      # path the launcher always includes. The glu module's meson build
+      # has landed it in /app/lib locally but /app/lib64 on CI (a
+      # flatpak-builder-version-dependent default), so find it rather
+      # than hardcode either.
+      - |
+        glu_lib=$(find /app/lib /app/lib64 -maxdepth 1 -name 'libGLU.so.1' 2>/dev/null | head -1)
+        ln -s "$glu_lib" /app/opt/Slicer/lib/libGLU.so.1
+
       # Wrapper script
       - install -Dm755 slicer.sh /app/bin/slicer
 
