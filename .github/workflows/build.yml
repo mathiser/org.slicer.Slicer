@@ -61,8 +61,10 @@ jobs:
               | sort -u
           ')
           if [ -n "$missing" ]; then
-            echo "::error::Missing libraries inside Flatpak sandbox:"
-            echo "$missing"
+            echo "::error::Missing libraries inside Flatpak sandbox (see annotations below):"
+            while IFS= read -r lib; do
+              echo "::error::Missing library: $lib"
+            done <<< "$missing"
             exit 1
           fi
           echo "All libraries resolved inside sandbox."
